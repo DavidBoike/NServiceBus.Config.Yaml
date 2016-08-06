@@ -42,6 +42,51 @@
         }
 
         [Test]
+        public void CanUseSingleQuotes()
+        {
+            var test = new ConfigurationTest();
+
+            test.Control = cfg =>
+            {
+                cfg.SendFailedMessagesTo("ironman");
+            };
+
+            test.Yaml = @"SendFailedMessagesTo: 'ironman'";
+
+            test.Run();
+        }
+
+        [Test]
+        public void CanUseDoubleQuotes()
+        {
+            var test = new ConfigurationTest();
+
+            test.Control = cfg =>
+            {
+                cfg.SendFailedMessagesTo("ironman");
+            };
+
+            test.Yaml = "SendFailedMessagesTo: \"ironman\"";
+
+            test.Run();
+        }
+
+        [Test]
+        public void CanNotUseBackticks()
+        {
+            var test = new ConfigurationTest();
+
+            test.Control = cfg =>
+            {
+                cfg.SendFailedMessagesTo("ironman");
+            };
+
+            test.Yaml = "SendFailedMessagesTo: `ironman`";
+
+            Assert.Throws<YamlDotNet.Core.SyntaxErrorException>(() => test.Run());
+        }
+
+        [Test]
         public void CanSetAuditQueue()
         {
             var test = new ConfigurationTest();
@@ -66,7 +111,7 @@
                 cfg.AuditProcessedMessagesTo("the-accountant", TimeSpan.FromDays(1));
             };
 
-            test.Yaml = @"AuditProcessedMessagesTo: the-accountant";
+            test.Yaml = @"AuditProcessedMessagesTo: ['the-accountant', '1.00:00:00']";
 
             test.Run();
         }
