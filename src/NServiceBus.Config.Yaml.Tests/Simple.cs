@@ -70,5 +70,30 @@
 
             test.Run();
         }
+
+        [Test]
+        public void CanUseYamlComments()
+        {
+            var test = new ConfigurationTest();
+
+            test.Control = cfg =>
+            {
+                cfg.SendFailedMessagesTo("error");
+            };
+
+            test.Yaml = @"---
+# this is a comment
+SendFailedMessagesTo: error
+#this is another comment
+
+
+
+
+
+
+#and another comment after blank lines
+---";
+            test.Run();
+        }
     }
 }
